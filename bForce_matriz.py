@@ -153,6 +153,7 @@ def reconstruir(matriz,solucion):
                 return False
             #si espacio no ha sido usado
             elif nuevaMatriz[indiceFila][indiceColumna][1] == False:
+                print("aca>")
                 fichas+=[[nuevaMatriz[indiceFila][indiceColumna][0],nuevaMatriz[indiceFila+1][indiceColumna][0]]]
                 #booleano a True (ya fueron utilizadas para armar una ficha)
                 nuevaMatriz[indiceFila][indiceColumna][1] = True
@@ -160,6 +161,7 @@ def reconstruir(matriz,solucion):
                 print("fichas: ",fichas)
                 #si con esta ficha termino la fila que hago?
                 if filaVisitada(nuevaMatriz[indiceFila]):
+                    print("random ass shit!")
                     indiceFila+=1 #saltamos una fila abajo
                     indiceColumna = 0 #columna vuelve a ser 0
                 else:
@@ -178,14 +180,19 @@ def reconstruir(matriz,solucion):
                             fichas+=[[nuevaMatriz[indiceFila][indiceColumna][0],nuevaMatriz[indiceFila+1][indiceColumna][0]]]
                             print("fichas2: ",fichas)
                             #booleano a True (ya fueron utilizadas para armar una ficha)
+                            
                             nuevaMatriz[indiceFila][indiceColumna][1] = True
+                            
                             nuevaMatriz[indiceFila+1][indiceColumna][1] = True
+                            
                             #si con esta ficha termino la fila que hago?
                             if filaVisitada(nuevaMatriz[indiceFila]):
                                 indiceFila+=1 #saltamos una fila abajo
                                 indiceColumna = 0 #columna vuelve a ser 0
+                                
                             
                             else:
+                                print("else else")
                                 indiceColumna+=1
                             
                         indiceColumna+=1
@@ -194,17 +201,22 @@ def reconstruir(matriz,solucion):
                     while indiceColumna<len(nuevaMatriz[0]):
                         if nuevaMatriz[indiceFila][indiceColumna][1] == False:
                             fichas+=[[nuevaMatriz[indiceFila][indiceColumna][0],nuevaMatriz[indiceFila+1][indiceColumna][0]]]
-                            print("fichas2: ",fichas)
+                            print("fichas56: ",fichas)
                             #booleano a True (ya fueron utilizadas para armar una ficha)
                             nuevaMatriz[indiceFila][indiceColumna][1] = True
+                            print("caida imperioromano")
                             nuevaMatriz[indiceFila+1][indiceColumna][1] = True
                             #si con esta ficha termino la fila que hago?
                             if filaVisitada(nuevaMatriz[indiceFila]):
+                                print("huh?")
                                 indiceFila+=1 #saltamos una fila abajo
                                 indiceColumna = 0 #columna vuelve a ser 0
+                                break
                             
                             else:
+                                print("huh 222?")
                                 indiceColumna+=1
+                                break
                             
                         indiceColumna+=1
                 
@@ -221,7 +233,7 @@ def reconstruir(matriz,solucion):
 
 #combinaciones(3,3*[0],0)
 
-print(reconstruir([[1,1,1],[0,4,5]],[1,0,0]))
+print(reconstruir([[0,4,0,3,1,0],[0,3,1,2,1,3],[4,4,0,1,4,3],[4,2,2,1,2,0],[4,1,3,3,2,2]],[1,0,1,1,1,0,0,0,0,0,0,0,0,0,0]))
 
 
 
