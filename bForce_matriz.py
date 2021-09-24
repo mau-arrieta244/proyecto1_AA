@@ -272,7 +272,7 @@ def bruteForce(matriz):
     if solucionesPermitidas == []:
         return "No existen soluciones para la matriz dada." 
     else:
-        print("\nLas soluciones permitidas son:")
+        #print("\nLas soluciones permitidas son:")
         return solucionesPermitidas
 
 #============================================================================================================================

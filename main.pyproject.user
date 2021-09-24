@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.14.2, 2021-09-07T20:27:42. -->
+<!-- Written by QtCreator 4.14.2, 2021-09-23T20:33:30. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -169,16 +169,16 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main2</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.C:/Users/PC/Documents/Gui/main.py</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/PC/Documents/Gui/main.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.C:/Users/PC/Documents/proyecto1_AA/main.py</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/PC/Documents/proyecto1_AA/main.py</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{348b7fba-093e-4820-a1a2-e3b4a31c3782}</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">C:\Users\PC\Documents\Gui\main.py</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">C:\Users\PC\Documents\proyecto1_AA\main.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">C:/Users/PC/Documents/Gui</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">C:/Users/PC/Documents/proyecto1_AA</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>
