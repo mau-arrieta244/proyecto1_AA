@@ -13,7 +13,7 @@
     <x>0</x>
     <y>0</y>
     <width>622</width>
-    <height>753</height>
+    <height>698</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -107,8 +107,8 @@ p, li { white-space: pre-wrap; }
   <widget class="QLabel" name="imagen">
    <property name="geometry">
     <rect>
-     <x>-140</x>
-     <y>-280</y>
+     <x>-270</x>
+     <y>-210</y>
      <width>1080</width>
      <height>1920</height>
     </rect>
@@ -207,38 +207,56 @@ color: rgb(255, 255, 255);</string>
     <string>Duración</string>
    </property>
   </widget>
-  <widget class="QScrollArea" name="scrollArea">
+  <widget class="QLCDNumber" name="lcdNumber">
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>610</y>
-     <width>541</width>
-     <height>101</height>
+     <y>600</y>
+     <width>511</width>
+     <height>51</height>
     </rect>
    </property>
-   <property name="widgetResizable">
+   <property name="font">
+    <font>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="autoFillBackground">
     <bool>true</bool>
    </property>
-   <widget class="QWidget" name="scrollAreaWidgetContents">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>539</width>
-      <height>99</height>
-     </rect>
-    </property>
-    <widget class="QTextEdit" name="textEdit">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>541</width>
-       <height>101</height>
-      </rect>
-     </property>
-    </widget>
-   </widget>
+   <property name="locale">
+    <locale language="Spanish" country="CostaRica"/>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="smallDecimalPoint">
+    <bool>true</bool>
+   </property>
+   <property name="digitCount">
+    <number>20</number>
+   </property>
+   <property name="segmentStyle">
+    <enum>QLCDNumber::Filled</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>610</y>
+     <width>21</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>26</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>s</string>
+   </property>
   </widget>
   <zorder>imagen</zorder>
   <zorder>botonFB</zorder>
@@ -250,7 +268,8 @@ color: rgb(255, 255, 255);</string>
   <zorder>tableView</zorder>
   <zorder>tabla</zorder>
   <zorder>label_4</zorder>
-  <zorder>scrollArea</zorder>
+  <zorder>lcdNumber</zorder>
+  <zorder>label_5</zorder>
  </widget>
  <resources/>
  <connections/>

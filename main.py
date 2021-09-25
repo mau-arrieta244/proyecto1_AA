@@ -11,6 +11,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from funciones import *
 from bForce_matriz import *
+from time import *
 
 #Programa principal
 class UI(QMainWindow):
@@ -56,9 +57,9 @@ class UI(QMainWindow):
             posColumna = 0
             posFila = 0
             while posFila < len(copiaMatriz) and indiceSolucion < len(combinacion):
-                r = random.randint(0, 255)
-                g = random.randint(0, 255)
-                b  = random.randint(0, 255)
+                r = random.randint(0, 220)
+                g = random.randint(0, 220)
+                b  = random.randint(0, 220)
                 if posColumna == len(copiaMatriz[0]) :
                     posFila+=1
                     posColumna=0
@@ -67,8 +68,6 @@ class UI(QMainWindow):
                     if posColumna == len(copiaMatriz[0]):
                         continue
                 if combinacion[indiceSolucion] == 0 and copiaMatriz[posFila][posColumna] != -1:
-                    num1 = copiaMatriz[posFila][posColumna]
-                    num2 = copiaMatriz[posFila][posColumna+1]
                     copiaMatriz[posFila][posColumna] = -1
                     copiaMatriz[posFila][posColumna+1] = -1
                     self.tabla.item(posFila,posColumna).setBackground(QtGui.QColor(r,g,b))
@@ -76,8 +75,6 @@ class UI(QMainWindow):
                     posColumna+=2
                     indiceSolucion+=1
                 elif combinacion[indiceSolucion] == 1 and copiaMatriz[posFila][posColumna] != -1:
-                    num1 = copiaMatriz[posFila][posColumna] 
-                    num2 = copiaMatriz[posFila+1][posColumna]
                     copiaMatriz[posFila][posColumna] = -1
                     copiaMatriz[posFila+1][posColumna] = -1
                     self.tabla.item(posFila,posColumna).setBackground(QtGui.QColor(r,g,b))
@@ -93,7 +90,11 @@ class UI(QMainWindow):
         Esta función se encarga de construir la tabla dentro de la interfaz gráfica
         según el tamaño de la matriz junto a sus elementos.
         """""
+        tiempoInicial = perf_counter()
         combinaciones = bruteForce(matriz)
+        tiempoFinal = perf_counter()
+        duracion = tiempoFinal - tiempoInicial
+        print(duracion)
         if isinstance(combinaciones, list):
             nFilas = len(matriz)
             nColumnas = len(matriz[0])
@@ -105,11 +106,13 @@ class UI(QMainWindow):
                 for j in i:
                     self.tabla.setItem(posFila,posColumna, QTableWidgetItem(str(j)))
                     self.tabla.item(posFila,posColumna).setTextAlignment(Qt.AlignCenter)
+                    self.tabla.item(posFila,posColumna).setForeground(QtGui.QColor(255,255,255))
                     posColumna += 1
                 posColumna = 0
                 posFila += 1
             print(combinaciones[0])
             self.colorearCeldas(combinaciones[0] ,matriz)
+            self.lcdNumber.display(duracion)
         elif isinstance(combinaciones, str):
             self.mostrarError(combinaciones)
         else:
