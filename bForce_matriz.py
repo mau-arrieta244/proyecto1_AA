@@ -257,23 +257,351 @@ def determinarRepetidas(fichas):
             fichas.append(ficha)
             i+=1     
         return False 
-    return True                
+    return True   
+
+
 def bruteForce(matriz):
-    #ojo, son soluciones permitidas, no necesariamente resuelven el juego,
-    #arman la matriz, pero puede que repitan fichas
-    solucionesPermitidas = []
+
     #cuantos bits tendra cada solucion
     tamanoSolucion = solucionSize(len(matriz)-1)
-    #nos retorna lista con todas las posibles combinaciones de 1 y 0 con esa cantidad de bits
-    posiblesCombi = combinaciones(tamanoSolucion)
-    for combinacion in posiblesCombi:
-        if reconstruir(matriz,combinacion)!= False and (determinarRepetidas(formarFichas(matriz, combinacion)) == False):
-            solucionesPermitidas+=[combinacion]
-    if solucionesPermitidas == []:
+
+    #nos da una lista donde cada elemento es combinacion en formato string
+    lista = [''.join(x) for x in itertools.product('01', repeat = tamanoSolucion)]
+    #nos da lista donde cada elemento es combinacion en formato integers dentro de listas
+    #y cuando ha armado una combinacion , prueba reconstruir con esa antes de armar la siguiente
+    listaSoluciones = []
+    for elemento in lista:
+        solucion = []
+        while elemento != "":
+            
+            solucion+=[int(elemento[0])]
+            
+            elemento=elemento[1:]
+        if reconstruir(matriz,solucion)!=False and determinarRepetidas(formarFichas(matriz, solucion)) == False:
+            listaSoluciones+=[solucion]
+            #return(" primerea valida encontrada! Brute Force")
+        
+    if listaSoluciones == []:
         return "No existen soluciones para la matriz dada." 
     else:
         #print("\nLas soluciones permitidas son:")
-        return solucionesPermitidas
+        return listaSoluciones
+
+
+
+solucionesInvalidas = []
+
+def reconstruirBacktrack(matriz,solucion,indiceMedio):
+    #primero, debemos meter la matriz en una estructura tipo [[3,false],[7,false]]
+    #donde el booleano representa si este elemento ya fue tomado para armar una ficha
+    nuevaMatriz = []
+    global solucionesInvalidas
+    #print("\n Revisando solucion : ",solucion)
+    for elemento in matriz:
+        nuevaFila = []
+        nuevaMatriz.append(nuevaFila)
+        for valor in elemento:
+            nuevaFila.append([valor,False])
+    #print(nuevaMatriz)
+    
+    fichas = []
+    indiceFila = 0
+    indiceColumna = 0
+
+    for indice,elemento in enumerate(solucion):
+        #print("\n invalidas: ",solucionesInvalidas)
+        #print("indice",indice)
+        #if(indice <= indiceMedio and reconstruir(matriz,solucion[:indice])==False):
+            #solucionesInvalidas.append(listaBinariaADecimal([solucion[:indice]]))
+            #print("\n entre a comparacion! invalidas: ",solucionesInvalidas)
+            #return False
+
+        
+        #if (indice==indiceMedio)and (reconstruir(matriz,solucion[:indiceMedio+1])==False):
+            #si en este punto ya tiraría false, agregue a esa lista.
+            #return 777
+        
+        
+            
+
+        if elemento == 0:
+            try:
+
+                #print("\nRevisando elemento orientacion 0, columna: ",indiceColumna," fila: ",indiceFila)
+                if indiceColumna+1>=len(nuevaMatriz[0]) and nuevaMatriz[indiceFila][indiceColumna][1] == False:
+                    #print("\ncolumna: ",indiceColumna," fila: ",indiceFila)
+                    #print("false 1, out of bounds derecha")
+                    if(indice<=indiceMedio):
+                        
+                        #decimal = listaBinariaADecimal(solucion[:indice+1])
+                        decimal = solucion[:indice+1]
+                        if(decimal!=0 and decimal not in solucionesInvalidas  and decimal!=1):
+                            solucionesInvalidas+=[decimal]
+                    return False
+                
+                #campos libres y no se sale out of bounds
+                #elementos no han sido usados y existen
+                elif (nuevaMatriz[indiceFila][indiceColumna][1] == False) and (nuevaMatriz[indiceFila][indiceColumna+1][1]==False):
+                    fichas+=[[nuevaMatriz[indiceFila][indiceColumna][0],nuevaMatriz[indiceFila][indiceColumna+1][0]]]
+                    #print("\n acabo de meter ficha(s): ",fichas)
+                    #booleano a True (ya fueron utilizadas para armar una ficha)
+                    nuevaMatriz[indiceFila][indiceColumna][1] = True
+                    nuevaMatriz[indiceFila][indiceColumna+1][1] = True
+                    #si con esta ficha termino la fila que hago?
+                    if filaVisitada(nuevaMatriz[indiceFila]):
+                        
+                        indiceFila+=1 #saltamos una fila abajo
+                        indiceColumna = 0 #columna vuelve a ser 0
+                        #print("\n termine fila, sigo con fila:",indiceFila," y columna: ",indiceColumna)
+                        
+                    else:
+                        indiceColumna+=2 #2 por que tomamos 2 elementos
+                        #print("\n tomé dos elementos, indice  = ",indiceColumna)
+                        
+                #donde estoy está libre pero siguiente ocupado
+                #pasaria si hubiera un 1 en fila 0, luego bajo a fila 1 y ahi quiero poner un 0
+                elif (nuevaMatriz[indiceFila][indiceColumna][1] == False) and (nuevaMatriz[indiceFila][indiceColumna+1][1]==True):
+                    #print("false 2, espacio libre pero alapar ocupado")
+                    if(indice<=indiceMedio):
+                        decimal = solucion[:indice+1]
+                        # decimal = listaBinariaADecimal(solucion[:indice+1])
+                        if(decimal!=0 and decimal not in solucionesInvalidas and decimal!=1):
+                            solucionesInvalidas+=[decimal]
+                    return False
+
+                #donde estoy está ocupado
+                #buscar campo libre por todas las columnas de la fila,
+                #si no encontró, bajar de fila
+                else:
+                    while indiceFila<len(nuevaMatriz):
+                        while indiceColumna < len(nuevaMatriz[0]):
+                            #print("\n , " ,indiceColumna," fila:",indiceFila)
+
+                            #si donde estoy esta libre pero es ultimo elemento de la fila
+                            if indiceColumna+1>=len(nuevaMatriz[0]) and nuevaMatriz[indiceFila][indiceColumna][1] == False:
+                                #print("false 4, outofbounds derecha en ciclo")
+                                if(indice<=indiceMedio):
+                                    #decimal = listaBinariaADecimal(solucion[:indice+1])
+                                    decimal = solucion[:indice+1]
+                                    if(decimal!=0 and decimal not in solucionesInvalidas and decimal!=1):
+                                        solucionesInvalidas+=[decimal]
+                                return False
+                            #donde estoy esta ocupado
+                            elif nuevaMatriz[indiceFila][indiceColumna][1] == True:
+                                #print("entre aqui!")
+                                #si con esta ficha termino la fila que hago?
+                                if filaVisitada(nuevaMatriz[indiceFila]):
+                                    indiceFila+=1 #saltamos una fila abajo
+                                    indiceColumna = 0 #columna vuelve a ser 0
+                                    
+                                else:
+                                    #print("jeje bugs")
+                                    #print("indice columna: ",indiceColumna)
+                                    indiceColumna+=1 #2 por que tomamos 2 elementos
+                                    #print("indice columna: ",indiceColumna)
+                                
+                
+                            #campos libres y no se sale out of bounds
+                            #elementos no han sido usados y existen
+                            elif (nuevaMatriz[indiceFila][indiceColumna][1] == False) and (nuevaMatriz[indiceFila][indiceColumna+1][1]==False):
+                                
+                                fichas+=[[nuevaMatriz[indiceFila][indiceColumna][0],nuevaMatriz[indiceFila][indiceColumna+1][0]]]
+                                #booleano a True (ya fueron utilizadas para armar una ficha)
+                                nuevaMatriz[indiceFila][indiceColumna][1] = True
+                                nuevaMatriz[indiceFila][indiceColumna+1][1] = True
+                                #si con esta ficha termino la fila que hago?
+                                if filaVisitada(nuevaMatriz[indiceFila]):
+                                    if(indiceFila+1>=len(nuevaMatriz)):
+                                        return fichas
+                                    else:
+                                        indiceFila+=1 #saltamos una fila abajo
+                                        indiceColumna = 0 #columna vuelve a ser 0
+                                    
+                                else:
+                                    indiceColumna+=2 #2 por que tomamos 2 elementos
+                                    
+                            #donde estoy está libre pero siguiente ocupado
+                            #pasaria si hubiera un 1 en fila 0, luego bajo a fila 1 y ahi quiero poner un 0
+                            elif (nuevaMatriz[indiceFila][indiceColumna][1] == False) and (nuevaMatriz[indiceFila][indiceColumna+1][1]==True):
+                                #print("false 2, espacio libre pero alapar ocupado")
+                                if(indice<=indiceMedio):
+                                    #decimal = listaBinariaADecimal(solucion[:indice+1])
+                                    decimal = solucion[:indice+1]
+                                    if(decimal!=0 and decimal not in solucionesInvalidas and decimal!=1):
+                                        solucionesInvalidas+=[decimal]
+                                return False
+                            
+                            
+                        
+
+                    #print("false ? no encontro campo libre en ninguna parte")
+                    if(indice<=indiceMedio):
+                        #decimal = listaBinariaADecimal(solucion[:indice+1])
+                        decimal = solucion[:indice+1]
+                        if(decimal!=0 and decimal not in solucionesInvalidas and decimal!=1):
+                            solucionesInvalidas+=[decimal]
+                    return False   
+            except IndexError:
+                if(indice<=indiceMedio):
+                        #decimal = listaBinariaADecimal(solucion[:indice+1])
+                        decimal = solucion[:indice+1]
+                        if(decimal!=0 and decimal not in solucionesInvalidas and decimal!=1):
+                            solucionesInvalidas+=[decimal]
+                return False   
+
+                
+                
+                    
+
+
+
+            
+        #ficha orientacion vertical
+        elif elemento == 1:
+        
+            #print("\nRevisando elemento orientacion 1, columna: ",indiceColumna," fila: ",indiceFila)
+            
+
+            if indiceFila+1>=len(nuevaMatriz):
+                #print("\njeje out of bounds abajo",fichas)
+                if(indice<=indiceMedio):
+                        #decimal = listaBinariaADecimal(solucion[:indice+1])
+                        decimal = solucion[:indice+1]
+                        if(decimal!=0 and decimal not in solucionesInvalidas and decimal!=1):
+                            solucionesInvalidas+=[decimal]
+                return False
+
+            #si fila a la que llega esta llena
+            elif filaVisitada(nuevaMatriz[indiceFila]):
+                indiceFila+=1
+
+            #si espacio no ha sido usado
+            elif nuevaMatriz[indiceFila][indiceColumna][1] == False:
+                #print("aca>")
+                fichas+=[[nuevaMatriz[indiceFila][indiceColumna][0],nuevaMatriz[indiceFila+1][indiceColumna][0]]]
+                #booleano a True (ya fueron utilizadas para armar una ficha)
+                nuevaMatriz[indiceFila][indiceColumna][1] = True
+                nuevaMatriz[indiceFila+1][indiceColumna][1] = True
+                #print("fichas: ",fichas)
+                #si con esta ficha termino la fila que hago?
+                if filaVisitada(nuevaMatriz[indiceFila]):
+
+                    #print(" test test!")
+                    indiceFila+=1 #saltamos una fila abajo
+                    indiceColumna = 0 #columna vuelve a ser 0
+                else:
+                    indiceColumna+=1 
+                    
+            #espacio ya fue tomado (booleano en True)
+            
+            elif nuevaMatriz[indiceFila][indiceColumna][1] == True:
+                
+                #se terminó fila?
+                if filaVisitada(nuevaMatriz[indiceFila]):
+                    #print("sip!")
+                    indiceFila+=1 #saltamos una fila abajo
+                    indiceColumna = 0 #columna vuelve a ser 0
+                    while indiceColumna<len(nuevaMatriz[0]):
+                        if indiceFila+1>=len(nuevaMatriz):
+                            #print("\njeje out of bounds abajo")
+                            if(indice<=indiceMedio):
+                                #decimal = listaBinariaADecimal(solucion[:indice+1])
+                                decimal = solucion[:indice+1]
+                                if(decimal!=0 and decimal not in solucionesInvalidas and decimal!=1):
+                                    solucionesInvalidas+=[decimal]
+                            return False
+                        elif nuevaMatriz[indiceFila][indiceColumna][1] == False:
+                            fichas+=[[nuevaMatriz[indiceFila][indiceColumna][0],nuevaMatriz[indiceFila+1][indiceColumna][0]]]
+                            #print("fichas2: ",fichas)
+                            #booleano a True (ya fueron utilizadas para armar una ficha)
+                            
+                            nuevaMatriz[indiceFila][indiceColumna][1] = True
+                            
+                            nuevaMatriz[indiceFila+1][indiceColumna][1] = True
+                            
+                            #si con esta ficha termino la fila que hago?
+                            if filaVisitada(nuevaMatriz[indiceFila]):
+                                indiceFila+=1 #saltamos una fila abajo
+                                indiceColumna = 0 #columna vuelve a ser 0
+                                
+                            
+                            else:
+                                #print("else else")
+                                indiceColumna+=1
+                            
+                        indiceColumna+=1
+                else:
+                    indiceColumna+=1
+                    while indiceColumna<len(nuevaMatriz[0]):
+                        if nuevaMatriz[indiceFila][indiceColumna][1] == False:
+                            fichas+=[[nuevaMatriz[indiceFila][indiceColumna][0],nuevaMatriz[indiceFila+1][indiceColumna][0]]]
+                            
+                            #booleano a True (ya fueron utilizadas para armar una ficha)
+                            nuevaMatriz[indiceFila][indiceColumna][1] = True
+                            
+                            nuevaMatriz[indiceFila+1][indiceColumna][1] = True
+                            #si con esta ficha termino la fila que hago?
+                            if filaVisitada(nuevaMatriz[indiceFila]):
+                                
+                                indiceFila+=1 #saltamos una fila abajo
+                                indiceColumna = 0 #columna vuelve a ser 0
+                                break
+                            
+                            else:
+                                indiceColumna+=1
+                                break
+                            
+                        indiceColumna+=1                
+    return fichas,solucion
+
+
+
+
+
+def backtracking(matriz):
+    #inicio2 = time.time()
+    
+    tamanoSolucion = solucionSize(len(matriz)-1)
+
+    #sera justo la mitad del arbol de soluciones
+    indiceMedio = tamanoSolucion//2
+
+    #nos da una lista donde cada elemento es combinacion en formato string
+    lista = [''.join(x) for x in itertools.product('01', repeat = tamanoSolucion)]
+    
+    #nos da lista donde cada elemento es combinacion en formato integers dentro de listas
+    listaSoluciones = []
+    global solucionesInvalidas 
+    #solucionesInvalidas = []
+
+    for elemento in lista:
+        solucion = []
+        while elemento != "":
+            solucion+=[int(elemento[0])]
+            elemento=elemento[1:]
+
+        #recorrido en loop desde segundo nivel hasta indiceMedio
+        for indice in range(1,indiceMedio+1):
+            #if (listaBinariaADecimal(solucion[:indice])) in solucionesInvalidas:
+            if solucion[:indice] in solucionesInvalidas:
+                #print("\n PODA, solucion: ",solucion,"\nparte elminada: ",solucion[:indice]," \ninvalidas: ",solucionesInvalidas)
+                pass
+            
+        #if (listaBinariaADecimal(solucion[:indiceMedio+1])) in solucionesInvalidas:
+           # print("\n PODA, solucion: ",solucion[:indiceMedio+1]," dec: ",listaBinariaADecimal(solucion[:indiceMedio+1])," \ninvalidas: ",solucionesInvalidas)
+           # pass
+
+        
+        else:
+            sol = reconstruirBacktrack(matriz,solucion,indiceMedio)
+            if sol!= False and determinarRepetidas(formarFichas(matriz, solucion)) == False:
+                listaSoluciones+=[solucion]
+               
+                #print("\n duracion backtracking : ",time.time()-inicio2)
+                #return "primera valida encontrada!"
+
+    #print("\n duracion backtracking : ",time.time()-inicio2)
+    return listaSoluciones
 
 #============================================================================================================================
 #================================================= PRUEBAS   ================================================================
@@ -327,7 +655,10 @@ print(determinarRepetidas(formarFichas([[3 ,3 ,0 ,5 ,0 ,3 ,0 ],
 
 #tenemos que  buscar la manera de ver qué fichas estan repetidas y quitar la solucion de una vez, 
 #si corremos todos estos algoritmos 2 veces tardaría demasiado para revisarlos
+print("\n doble 5: \n")
 
+print(backtracking(     [[5,5,5,3,3,4,4],[2,4,1,0,5,2,4],[1,0,0,2,1,2,5],[2,4,2,1,3,3,0],[3,3,3,4,5,0,0],[5,2,1,1,1,4,0]]   ))
+print(bruteForce(       [[5,5,5,3,3,4,4],[2,4,1,0,5,2,4],[1,0,0,2,1,2,5],[2,4,2,1,3,3,0],[3,3,3,4,5,0,0],[5,2,1,1,1,4,0]]    ))
 
 #juego doble 10
 """""
