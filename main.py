@@ -10,17 +10,17 @@ from PyQt5 import QtGui, uic
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from funciones import *
-from bForce_matriz import *
+from algoritmos import *
 from time import *
 
-#Programa principal
+#Definición de funciones
 class UI(QMainWindow):
     def __init__(self):
         super(UI, self).__init__()
         uic.loadUi("window.ui", self)
         self.setWindowTitle("Matriz de dominó")
-        self.botonFB.clicked.connect(self.recibirMatriz)
-        self.botonBacktracking.clicked.connect(self.recibirMatriz)
+        self.botonFB.clicked.connect(lambda:self.recibirMatriz(1))
+        self.botonBacktracking.clicked.connect(lambda:self.recibirMatriz(2))
         self.show()
 
     def mostrarError(self, texto):
@@ -34,7 +34,7 @@ class UI(QMainWindow):
         mensaje.setIcon(QMessageBox.Critical) 
         mensaje.exec()
 
-    def recibirMatriz(self):
+    def recibirMatriz(self, numBoton):
         """""
         Se recibe la matriz como un string, cada fila está separada por un 
         punto y coma. Se retorna una matriz para que pueda ser manejada.
@@ -43,7 +43,7 @@ class UI(QMainWindow):
         if isinstance(respuesta, str):
             self.mostrarError(respuesta)
         elif isinstance(respuesta, list):
-            self.construirTabla(respuesta)
+            self.construirTabla(respuesta, numBoton)
         else:
             return self.mostrarAdvertencia("Ingrese datos válidos.")  
 
@@ -85,16 +85,20 @@ class UI(QMainWindow):
         except IndexError:
             return []             
 
-    def construirTabla(self, matriz):
+    def construirTabla(self, matriz, numBoton):
         """""
         Esta función se encarga de construir la tabla dentro de la interfaz gráfica
         según el tamaño de la matriz junto a sus elementos.
         """""
         tiempoInicial = perf_counter()
-        combinaciones = bruteForce(matriz)
+        #Si es 1 fue que se presionó el botón de fuerza bruta.
+        if numBoton == 1:
+            combinaciones = bruteForce(matriz)
+        #Si es 2 fue que se presionó el botón de backtracking.
+        elif numBoton == 2:
+            combinaciones = backtracking(matriz)
         tiempoFinal = perf_counter()
         duracion = tiempoFinal - tiempoInicial
-        print(duracion)
         if isinstance(combinaciones, list):
             nFilas = len(matriz)
             nColumnas = len(matriz[0])
@@ -110,13 +114,14 @@ class UI(QMainWindow):
                     posColumna += 1
                 posColumna = 0
                 posFila += 1
-            print(combinaciones[0])
             self.colorearCeldas(combinaciones[0] ,matriz)
             self.lcdNumber.display(duracion)
         elif isinstance(combinaciones, str):
             self.mostrarError(combinaciones)
         else:
             return self.mostrarError("No se pudo realizar la operación.")
+            
+#Programa principal
 app = QApplication(sys.argv)
 UIWindow = UI()
 app.exec_()
