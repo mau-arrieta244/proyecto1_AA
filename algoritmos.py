@@ -632,8 +632,3 @@ print(determinarRepetidas(formarFichas([
 Verifica que no hay repetidos por eso da False, sin embargo ocurre error de memoria.
 """""
 
-print(backtracking([[3 ,3 ,0 ,5 ,0 ,3 ,0 ],
-[5 ,1 ,0 ,2 ,3 ,2 ,0 ],[1 ,4 ,3 ,5 ,5 ,2 ,2 ],
-[1 ,5 ,3 ,5 ,2 ,4 ,1 ],[4 ,2 ,0 ,4 ,4 ,5 ,4 ],
-[1 ,1 ,2 ,4 ,1 ,3 ,0 ]])) # profe (revisar)
-
