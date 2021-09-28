@@ -99,7 +99,6 @@ class UI(QMainWindow):
             combinaciones = backtracking(matriz)
         tiempoFinal = perf_counter()
         duracion = tiempoFinal - tiempoInicial
-        print(duracion)
         if isinstance(combinaciones, list):
             nFilas = len(matriz)
             nColumnas = len(matriz[0])

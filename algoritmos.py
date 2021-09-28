@@ -225,11 +225,15 @@ def determinarRepetidas(fichas):
     if fichas != []:
         i = 0
         while i < len(fichas):
-            ficha = fichas.pop(i)
-            for j in fichas:
-                if j == ficha or [[j[0][1],j[0][0]]] == ficha:  
+            ficha = fichas[i]
+            j = 0
+            while j < len(fichas):
+                if j == i:
+                    j+=1
+                    continue
+                if fichas[j] == ficha or [[fichas[j][0][1], fichas[j][0][0]]] == ficha:  
                     return True
-            fichas.append(ficha)
+                j+=1
             i+=1     
         return False 
     return True   
@@ -458,61 +462,41 @@ def backtracking(matriz):
 
 #juego doble 1: (2**3 combinaciones)
 #print(bruteForce([[1,0,1], [0,1,0]])) #no
-#print(bruteForce([[1,1,1],[0,0,0]])) #profe ok
+#print(bruteForce([[1,1,1],[0,0,0]])) # ok
+#print(backtracking([[1,1,1],[0,0,0]])) # ok
 
 #juego doble 2: (2**6 combinaciones)
-#print(bruteForce([[2,1,0,1], [0 ,1, 0, 1], [0, 2, 2, 2] ]))
-#print(backtracking([[2,1,2,2], [0 ,1, 1, 2], [0,1,0,0]])) # profe ok
+#print(bruteForce([[2,1,2,2], [0 ,1, 1, 2], [0,1,0,0]])) #  ok
+#print(backtracking([[2,1,2,2], [0 ,1, 1, 2], [0,1,0,0]])) #  ok
 
 #juego doble 3: (2**10 combinaciones)
-#print(bruteForce([[2,2,2,3,3],[2,2,0,1,3],[1,3,0,1,1],[3,0,0,0,1]]))
-#print(bruteForce([[2,3,3,2,2],[3,0,3,0,2],[2,1,3,1,0],[1,0,1,1,0]])) # profe (revisar)
+#print(bruteForce([[2,2,2,3,3],[2,2,0,1,3],[1,3,0,1,1],[3,0,0,0,1]])) # ok
+#print(backtracking([[2,2,2,3,3],[2,2,0,1,3],[1,3,0,1,1],[3,0,0,0,1]])) # ok
 
 #juego doble 4: (2**15 combinaciones)
-#print(bruteForce([[0,4,0,3,1,0],[0,3,1,2,1,3],[4,4,0,1,4,3],[4,2,2,1,2,0],[4,1,3,3,2,2]]))
 """""
 print(bruteForce([[1 ,2 ,4 ,0 ,4 ,3 ],
 [0 ,3 ,3 ,4 ,4 ,2 ],
 [1 ,1 ,3 ,4 ,1 ,0 ],
 [0 ,1 ,0 ,3 ,4 ,2 ],
-[0 ,2 ,3 ,1 ,2 ,2 ]])) # profe ok
+[0 ,2 ,3 ,1 ,2 ,2 ]])) #  ok
+
+print(backtracking([[1 ,2 ,4 ,0 ,4 ,3 ],
+[0 ,3 ,3 ,4 ,4 ,2 ],
+[1 ,1 ,3 ,4 ,1 ,0 ],
+[0 ,1 ,0 ,3 ,4 ,2 ],
+[0 ,2 ,3 ,1 ,2 ,2 ]])) #  ok
 """""
 
 #juego doble 5: (2**21 combinaciones)
 """""
-print(bruteForce([[5,5,5,3,3,4,4],
-[2,4,1,0,5,2,4],[1,0,0,2,1,2,5],
-[2,4,2,1,3,3,0],[3,3,3,4,5,0,0],
-[5,2,1,1,1,4,0]]))
-"""""
-"""""
-print(bruteForce([[3 ,3 ,0 ,5 ,0 ,3 ,0 ],
-[5 ,1 ,0 ,2 ,3 ,2 ,0 ],[1 ,4 ,3 ,5 ,5 ,2 ,2 ],
-[1 ,5 ,3 ,5 ,2 ,4 ,1 ],[4 ,2 ,0 ,4 ,4 ,5 ,4 ],
-[1 ,1 ,2 ,4 ,1 ,3 ,0 ]])) # profe (revisar)
-"""""
-"""""
-Verifica que no hay repetidos por eso da False, sin embargo en la funcion
-reeconstruir esta el problema.
-print(determinarRepetidas(formarFichas([[3 ,3 ,0 ,5 ,0 ,3 ,0 ],
-[5 ,1 ,0 ,2 ,3 ,2 ,0 ],[1 ,4 ,3 ,5 ,5 ,2 ,2 ],
-[1 ,5 ,3 ,5 ,2 ,4 ,1 ],[4 ,2 ,0 ,4 ,4 ,5 ,4 ],
-[1 ,1 ,2 ,4 ,1 ,3 ,0 ]], [0 ,0 ,0 ,1 ,1 ,0 ,0 ,1 ,0 ,1 ,1 ,1 ,1 ,0 ,1 ,0 ,0 ,1 ,0 ,0 ,0 ])))
-"""""
-#ya este dura aprox 10 minutos corriendo
-
-#tenemos que  buscar la manera de ver qué fichas estan repetidas y quitar la solucion de una vez, 
-#si corremos todos estos algoritmos 2 veces tardaría demasiado para revisarlos
-"""""
-print("\n doble 5: \n")
-
 print(backtracking(
 [[5,5,5,3,3,4,4],
 [2,4,1,0,5,2,4],
 [1,0,0,2,1,2,5],
 [2,4,2,1,3,3,0],
 [3,3,3,4,5,0,0],
-[5,2,1,1,1,4,0]]))
+[5,2,1,1,1,4,0]])) #ok
 
 print(bruteForce(
 [[5,5,5,3,3,4,4],
@@ -520,7 +504,7 @@ print(bruteForce(
 [1,0,0,2,1,2,5],
 [2,4,2,1,3,3,0],
 [3,3,3,4,5,0,0],
-[5,2,1,1,1,4,0]]))
+[5,2,1,1,1,4,0]])) #ok
 """""
 #juego doble 10
 """""
@@ -551,6 +535,5 @@ print(determinarRepetidas(formarFichas([
 [2 ,0 ,7 ,0 ,7 ,0, 3, 3, 0, 1, 2, 6] ,
 [10, 10 ,9 ,7 ,10 ,9 ,4 ,7 ,4 ,4 ,5 ,10 ]], 
 [0 ,0 ,0 ,0 ,1 ,1, 0 ,1 ,1 ,0 ,1 ,1 ,0 ,1 ,1 ,0 ,0 ,1 ,1 ,1 ,0 ,1 ,1 ,1 ,1, 1 ,0 ,0, 1, 1 ,1 ,1 ,1 ,1 ,0 ,1 ,1 ,1 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,0 ,1, 0, 0 ,1 ,1 ,1 ,1 ,0 ,1 ,1 ,1 ,1 ,0 ,1, 1, 0 ,0 ,0 ,0])))
-Verifica que no hay repetidos por eso da False, sin embargo ocurre error de memoria.
 """""
 
